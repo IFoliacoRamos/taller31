@@ -11,6 +11,13 @@ ctx.lineWidth = 2;
 
 ctx.font = "18px Arial";
 
+// Bits de región
+const INSIDE = 0;
+const LEFT = 1;
+const RIGHT = 2;
+const BOTTOM = 4;
+const TOP = 8;
+
 // Variables del viewport
 let xmin = 150;
 let ymin = 150;
@@ -54,6 +61,7 @@ const escenas = [
     }
 
 ];
+
 
 // Limpiar canvas
 function limpiarCanvas() {
@@ -198,6 +206,149 @@ function dibujarCoordenadas(x1, y1, x2, y2) {
         x2 + 10,
         y2 - 10
     );
+}
+// Obtener código binario de región
+function obtenerCodigo(x, y) {
+
+    let codigo = INSIDE;
+
+    // Izquierda
+    if (x < xmin) {
+
+        codigo |= LEFT;
+    }
+
+    // Derecha
+    else if (x > xmax) {
+
+        codigo |= RIGHT;
+    }
+
+    // Arriba
+    if (y < ymin) {
+
+        codigo |= TOP;
+    }
+
+    // Abajo
+    else if (y > ymax) {
+
+        codigo |= BOTTOM;
+    }
+
+    return codigo;
+}
+
+// Algoritmo Cohen-Sutherland
+function cohenSutherland(x1, y1, x2, y2) {
+
+    let codigo1 = obtenerCodigo(x1, y1);
+
+    let codigo2 = obtenerCodigo(x2, y2);
+
+    let aceptada = false;
+
+    while (true) {
+
+        // Línea completamente dentro
+        if ((codigo1 | codigo2) === 0) {
+
+            aceptada = true;
+
+            break;
+        }
+
+        // Línea completamente fuera
+        else if ((codigo1 & codigo2) !== 0) {
+
+            break;
+        }
+
+        // Línea parcialmente visible
+        else {
+
+            let codigoFuera;
+
+            let x;
+            let y;
+
+            if (codigo1 !== 0) {
+
+                codigoFuera = codigo1;
+            }
+            else {
+
+                codigoFuera = codigo2;
+            }
+
+            // Arriba
+            if (codigoFuera & TOP) {
+
+                x = x1 + (x2 - x1) *
+                    (ymin - y1) /
+                    (y2 - y1);
+
+                y = ymin;
+            }
+
+            // Abajo
+            else if (codigoFuera & BOTTOM) {
+
+                x = x1 + (x2 - x1) *
+                    (ymax - y1) /
+                    (y2 - y1);
+
+                y = ymax;
+            }
+
+            // Derecha
+            else if (codigoFuera & RIGHT) {
+
+                y = y1 + (y2 - y1) *
+                    (xmax - x1) /
+                    (x2 - x1);
+
+                x = xmax;
+            }
+
+            // Izquierda
+            else if (codigoFuera & LEFT) {
+
+                y = y1 + (y2 - y1) *
+                    (xmin - x1) /
+                    (x2 - x1);
+
+                x = xmin;
+            }
+
+            // Reemplazar punto exterior
+            if (codigoFuera === codigo1) {
+
+                x1 = x;
+                y1 = y;
+
+                codigo1 = obtenerCodigo(x1, y1);
+            }
+            else {
+
+                x2 = x;
+                y2 = y;
+
+                codigo2 = obtenerCodigo(x2, y2);
+            }
+        }
+    }
+
+    return {
+
+        aceptada,
+
+        x1,
+        y1,
+
+        x2,
+        y2
+    };
 }
 
 // Dibujar escena actual
