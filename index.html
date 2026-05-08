@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Taller 3-1 - Cohen Sutherland</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <h1>
+        Algoritmo de Cohen-Sutherland
+    </h1>
+
+    <div class="principal">
+
+        <div class="panel">
+
+            <h3>
+                Ventana de Recorte
+            </h3>
+
+            <label>
+                X mínimo
+            </label>
+
+            <input type="number"
+                   id="xmin"
+                   value="150">
+
+            <label>
+                Y mínimo
+            </label>
+
+            <input type="number"
+                   id="ymin"
+                   value="150">
+
+            <label>
+                X máximo
+            </label>
+
+            <input type="number"
+                   id="xmax"
+                   value="450">
+
+            <label>
+                Y máximo
+            </label>
+
+            <input type="number"
+                   id="ymax"
+                   value="350">
+
+            <button>
+                Actualizar
+            </button>
+
+        </div>
+
+        <div class="canvasContainer">
+
+            <canvas id="canvas"
+                    width="700"
+                    height="500">
+            </canvas>
+
+        </div>
+
+    </div>
+
+    <div class="navegacion">
+
+        <button>
+            Anterior
+        </button>
+
+        <button>
+            Siguiente
+        </button>
+
+    </div>
+
+    <h2 id="casoTitulo">
+        Caso de prueba
+    </h2>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
