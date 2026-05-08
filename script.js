@@ -24,19 +24,33 @@ let escenaActual = 0;
 const escenas = [
 
     {
-        titulo: "Caso 1",
+        titulo: "Caso 1 - Línea completamente dentro",
+
         x1: 200,
         y1: 200,
+
         x2: 400,
         y2: 300
     },
 
     {
-        titulo: "Caso 2",
+        titulo: "Caso 2 - Línea diagonal",
+
         x1: 100,
         y1: 100,
+
         x2: 600,
         y2: 400
+    },
+
+    {
+        titulo: "Caso 3 - Línea horizontal",
+
+        x1: 50,
+        y1: 250,
+
+        x2: 650,
+        y2: 250
     }
 
 ];
@@ -132,6 +146,103 @@ function dibujarViewport() {
     );
 }
 
+// Dibujar línea genérica
+function dibujarLinea(x1, y1, x2, y2, color) {
+
+    ctx.beginPath();
+
+    ctx.moveTo(x1, y1);
+
+    ctx.lineTo(x2, y2);
+
+    ctx.strokeStyle = color;
+
+    ctx.lineWidth = 3;
+
+    ctx.stroke();
+}
+
+// Dibujar puntos extremos
+function dibujarPuntos(x1, y1, x2, y2) {
+
+    ctx.fillStyle = "black";
+
+    ctx.beginPath();
+
+    ctx.arc(x1, y1, 5, 0, Math.PI * 2);
+
+    ctx.fill();
+
+    ctx.beginPath();
+
+    ctx.arc(x2, y2, 5, 0, Math.PI * 2);
+
+    ctx.fill();
+}
+
+// Dibujar coordenadas
+function dibujarCoordenadas(x1, y1, x2, y2) {
+
+    ctx.fillStyle = "black";
+
+    ctx.font = "14px Arial";
+
+    ctx.fillText(
+        `(${x1}, ${y1})`,
+        x1 + 10,
+        y1 - 10
+    );
+
+    ctx.fillText(
+        `(${x2}, ${y2})`,
+        x2 + 10,
+        y2 - 10
+    );
+}
+
+// Dibujar escena actual
+function dibujarEscena() {
+
+    limpiarCanvas();
+
+    dibujarFondo();
+
+    dibujarCuadricula();
+
+    dibujarEjes();
+
+    dibujarViewport();
+
+    dibujarTexto();
+
+    let escena = escenas[escenaActual];
+
+    dibujarLinea(
+        escena.x1,
+        escena.y1,
+        escena.x2,
+        escena.y2,
+        "gray"
+    );
+
+    dibujarPuntos(
+        escena.x1,
+        escena.y1,
+        escena.x2,
+        escena.y2
+    );
+
+    dibujarCoordenadas(
+        escena.x1,
+        escena.y1,
+        escena.x2,
+        escena.y2
+    );
+
+    document.getElementById("casoTitulo").innerText =
+    escena.titulo;
+}
+
 // Dibujar texto informativo
 function dibujarTexto() {
 
@@ -161,4 +272,4 @@ function inicializarCanvas() {
 }
 
 // Ejecutar inicio
-inicializarCanvas();
+dibujarEscena();
