@@ -198,6 +198,21 @@ function dibujarLinea(x1, y1, x2, y2, color) {
     ctx.lineWidth = 3;
 
     ctx.stroke();
+
+    // Dibujar extremos
+    ctx.fillStyle = color;
+
+    ctx.beginPath();
+
+    ctx.arc(x1, y1, 4, 0, Math.PI * 2);
+
+    ctx.fill();
+
+    ctx.beginPath();
+
+    ctx.arc(x2, y2, 4, 0, Math.PI * 2);
+
+    ctx.fill();
 }
 
 // Dibujar puntos extremos
@@ -423,74 +438,99 @@ function dibujarEscena() {
 
     let escena = escenas[escenaActual];
 
-    // Dibujar línea original
-    dibujarLinea(
-    escena.x1,
-    escena.y1,
-    escena.x2,
-    escena.y2,
-    "gray"
-);
-
-// Aplicar algoritmo
-    let resultado = cohenSutherland(
-
-    escena.x1,
-    escena.y1,
-
-    escena.x2,
-    escena.y2
-);
-
-// Dibujar línea recortada
-    if (resultado.aceptada) {
-
+    // Línea original
     dibujarLinea(
 
-        resultado.x1,
-        resultado.y1,
-
-        resultado.x2,
-        resultado.y2,
-
-        "red"
-    );
-}
-
-    dibujarPuntos(
         escena.x1,
         escena.y1,
+
         escena.x2,
-        escena.y2
+        escena.y2,
+
+        "gray"
     );
 
+    // Coordenadas originales
     dibujarCoordenadas(
+
         escena.x1,
         escena.y1,
+
         escena.x2,
         escena.y2
     );
 
+    // Mostrar códigos
     mostrarCodigosRegion(
 
-    escena.x1,
-    escena.y1,
+        escena.x1,
+        escena.y1,
 
-    escena.x2,
-    escena.y2
-);
+        escena.x2,
+        escena.y2
+    );
 
+    // Aplicar algoritmo
+    let resultado = cohenSutherland(
+
+        escena.x1,
+        escena.y1,
+
+        escena.x2,
+        escena.y2
+    );
+
+    // Línea aceptada
+    if (resultado.aceptada) {
+
+        dibujarLinea(
+
+            resultado.x1,
+            resultado.y1,
+
+            resultado.x2,
+            resultado.y2,
+
+            "red"
+        );
+
+        ctx.fillStyle = "green";
+
+        ctx.font = "16px Arial";
+
+        ctx.fillText(
+            "Resultado: Línea aceptada",
+            20,
+            80
+        );
+    }
+
+    // Línea rechazada
+    else {
+
+        ctx.fillStyle = "red";
+
+        ctx.font = "16px Arial";
+
+        ctx.fillText(
+            "Resultado: Línea rechazada",
+            20,
+            80
+        );
+    }
+
+    // Información de escena
     document.getElementById("casoTitulo").innerText =
 
-    escena.titulo +
+        escena.titulo +
 
-    "  |  Escena " +
+        " | Escena " +
 
-    (escenaActual + 1) +
+        (escenaActual + 1) +
 
-    " de " +
+        " de " +
 
-    escenas.length;
+        escenas.length;
 }
 
 function dibujarTexto() {
