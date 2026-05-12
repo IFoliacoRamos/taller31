@@ -41,23 +41,43 @@ const escenas = [
     },
 
     {
-        titulo: "Caso 2 - Línea diagonal",
+        titulo: "Caso 2 - Línea completamente fuera",
 
-        x1: 100,
-        y1: 100,
+        x1: 20,
+        y1: 50,
 
-        x2: 600,
-        y2: 400
+        x2: 80,
+        y2: 100
     },
 
     {
-        titulo: "Caso 3 - Línea horizontal",
+        titulo: "Caso 3 - Entra por la izquierda",
 
         x1: 50,
         y1: 250,
 
-        x2: 650,
+        x2: 250,
         y2: 250
+    },
+
+    {
+        titulo: "Caso 4 - Toca solo una esquina",
+
+        x1: 450,
+        y1: 150,
+
+        x2: 600,
+        y2: 0
+    },
+
+    {
+        titulo: "Caso 5 - Cruza completamente",
+
+        x1: 50,
+        y1: 100,
+
+        x2: 600,
+        y2: 400
     }
 
 ];
@@ -368,13 +388,39 @@ function dibujarEscena() {
 
     let escena = escenas[escenaActual];
 
+    // Dibujar línea original
     dibujarLinea(
-        escena.x1,
-        escena.y1,
-        escena.x2,
-        escena.y2,
-        "gray"
+    escena.x1,
+    escena.y1,
+    escena.x2,
+    escena.y2,
+    "gray"
+);
+
+// Aplicar algoritmo
+    let resultado = cohenSutherland(
+
+    escena.x1,
+    escena.y1,
+
+    escena.x2,
+    escena.y2
+);
+
+// Dibujar línea recortada
+    if (resultado.aceptada) {
+
+    dibujarLinea(
+
+        resultado.x1,
+        resultado.y1,
+
+        resultado.x2,
+        resultado.y2,
+
+        "red"
     );
+}
 
     dibujarPuntos(
         escena.x1,
@@ -391,7 +437,16 @@ function dibujarEscena() {
     );
 
     document.getElementById("casoTitulo").innerText =
-    escena.titulo;
+
+    escena.titulo +
+
+    "  |  Escena " +
+
+    (escenaActual + 1) +
+
+    " de " +
+
+    escenas.length;
 }
 
 // Dibujar texto informativo
@@ -424,3 +479,29 @@ function inicializarCanvas() {
 
 // Ejecutar inicio
 dibujarEscena();
+
+// Escena siguiente
+function siguienteEscena() {
+
+    escenaActual++;
+
+    if (escenaActual >= escenas.length) {
+
+        escenaActual = 0;
+    }
+
+    dibujarEscena();
+}
+
+// Escena anterior
+function anteriorEscena() {
+
+    escenaActual--;
+
+    if (escenaActual < 0) {
+
+        escenaActual = escenas.length - 1;
+    }
+
+    dibujarEscena();
+}
