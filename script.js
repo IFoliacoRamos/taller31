@@ -159,9 +159,19 @@ function dibujarEjes() {
     ctx.stroke();
 }
 
-// Dibujar viewport
 function dibujarViewport() {
 
+    // Área interna
+    ctx.fillStyle = "rgba(0, 0, 255, 0.08)";
+
+    ctx.fillRect(
+        xmin,
+        ymin,
+        xmax - xmin,
+        ymax - ymin
+    );
+
+    // Borde
     ctx.strokeStyle = "blue";
 
     ctx.lineWidth = 3;
@@ -227,6 +237,31 @@ function dibujarCoordenadas(x1, y1, x2, y2) {
         y2 - 10
     );
 }
+
+// Mostrar códigos de región
+function mostrarCodigosRegion(x1, y1, x2, y2) {
+
+    let codigo1 = obtenerCodigo(x1, y1);
+
+    let codigo2 = obtenerCodigo(x2, y2);
+
+    ctx.fillStyle = "darkred";
+
+    ctx.font = "14px Arial";
+
+    ctx.fillText(
+        `Código P1: ${codigo1.toString(2)}`,
+        20,
+        30
+    );
+
+    ctx.fillText(
+        `Código P2: ${codigo2.toString(2)}`,
+        20,
+        50
+    );
+}
+
 // Obtener código binario de región
 function obtenerCodigo(x, y) {
 
@@ -436,6 +471,15 @@ function dibujarEscena() {
         escena.y2
     );
 
+    mostrarCodigosRegion(
+
+    escena.x1,
+    escena.y1,
+
+    escena.x2,
+    escena.y2
+);
+
     document.getElementById("casoTitulo").innerText =
 
     escena.titulo +
@@ -449,15 +493,40 @@ function dibujarEscena() {
     escenas.length;
 }
 
-// Dibujar texto informativo
 function dibujarTexto() {
 
     ctx.fillStyle = "black";
 
+    ctx.font = "16px Arial";
+
     ctx.fillText(
-        "Viewport de recorte",
+        "Ventana de recorte",
         xmin,
-        ymin - 10
+        ymin - 15
+    );
+
+    ctx.fillText(
+        `xmin: ${xmin}`,
+        xmin,
+        ymax + 25
+    );
+
+    ctx.fillText(
+        `ymin: ${ymin}`,
+        xmin,
+        ymax + 45
+    );
+
+    ctx.fillText(
+        `xmax: ${xmax}`,
+        xmax - 90,
+        ymax + 25
+    );
+
+    ctx.fillText(
+        `ymax: ${ymax}`,
+        xmax - 90,
+        ymax + 45
     );
 }
 
@@ -502,6 +571,28 @@ function anteriorEscena() {
 
         escenaActual = escenas.length - 1;
     }
+
+    dibujarEscena();
+}
+
+// Actualizar ventana de recorte
+function actualizarVentana() {
+
+    xmin = parseInt(
+        document.getElementById("xmin").value
+    );
+
+    ymin = parseInt(
+        document.getElementById("ymin").value
+    );
+
+    xmax = parseInt(
+        document.getElementById("xmax").value
+    );
+
+    ymax = parseInt(
+        document.getElementById("ymax").value
+    );
 
     dibujarEscena();
 }
